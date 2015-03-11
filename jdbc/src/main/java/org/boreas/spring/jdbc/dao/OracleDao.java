@@ -228,7 +228,8 @@ public abstract class OracleDao<ID, T> extends AbstractJdbcDao<ID, T> {
 				tableName).append(" (");
 		columns = new ArrayList<String>(descriptors.size());
 		List<String> values = new ArrayList<String>(descriptors.size());
-		int[] types = new int[descriptors.size() - 1];
+		int[] types = new int[descriptors.size() > 1 ? descriptors.size() - 1
+				: 0];
 		int i = 0;
 		Integer indexOfId = null;
 		for (String column : descriptors.keySet()) {
