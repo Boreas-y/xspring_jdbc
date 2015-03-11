@@ -127,14 +127,15 @@ public abstract class OracleDao<ID, T> extends AbstractJdbcDao<ID, T> {
 		Object[] params = new Object[generateId ? columns.size() - 1 : columns
 				.size()];
 		String idColumn = getDaoConfig().getIdColumn();
-		for (int i = 0; i < params.length; i++) {
+		for (int i = 0, p = 0; i < params.length; i++) {
 			String column = columns.get(i);
 			if (!generateId || !idColumn.equals(column)) {
 				Object value = getValue(bean, column);
 				if (value instanceof Date && value != null)
-					params[i] = sdf.get().format(value);
+					params[p] = sdf.get().format(value);
 				else
-					params[i] = value;
+					params[p] = value;
+				p++;
 			}
 		}
 		return params;
@@ -186,10 +187,13 @@ public abstract class OracleDao<ID, T> extends AbstractJdbcDao<ID, T> {
 		OracleDaoConfig<T> daoConfig = (OracleDaoConfig<T>) config();
 		Class<T> beanType = daoConfig.getBeanType();
 		Assert.notNull(beanType, "beanType cannot be null.");
-		String tableName = nameMapper.buildTableName(beanType);
+		String tableName = daoConfig.getTableName() != null ? nameMapper
+				.buildTableName(daoConfig.getTableName()) : nameMapper
+				.buildTableName(beanType);
 		daoConfig.setTableName(tableName);
-		String sequenceName = nameMapper.buildSequenceName(beanType)
-				.toUpperCase();
+		String sequenceName = daoConfig.getSequenceName() != null ? nameMapper
+				.buildSequenceName(daoConfig.getSequenceName()) : nameMapper
+				.buildSequenceName(beanType).toUpperCase();
 		daoConfig.setSequenceName(sequenceName.toUpperCase());
 		buildSequenceSql(sequenceName);
 		setConfig(daoConfig);

@@ -19,4 +19,12 @@ public interface OracleNameMapper extends NameMapper {
 	 * @return
 	 */
 	String buildSequenceName(Class<?> type);
+
+	/**
+	 * Generate the name of sequence by given name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	String buildSequenceName(String name);
 }

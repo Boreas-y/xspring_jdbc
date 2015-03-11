@@ -14,6 +14,12 @@ public class SimpleOracleNameMapper extends SimpleNameMapper implements
 				.append(sequenceSuffix).toString();
 	}
 
+	@Override
+	public String buildSequenceName(String name) {
+		return new StringBuilder(sequencePrefix).append(name)
+				.append(sequenceSuffix).toString();
+	}
+
 	public String getSequencePrefix() {
 		return sequencePrefix;
 	}
