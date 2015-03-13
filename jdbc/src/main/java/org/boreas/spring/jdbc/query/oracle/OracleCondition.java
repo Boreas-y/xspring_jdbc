@@ -36,19 +36,32 @@ public class OracleCondition extends AbstractCondition {
 
 	@Override
 	public Query between(String fieldName, Object min, Object max) {
-		if (min != null && max != null) {
-			if (Date.class.isAssignableFrom(min.getClass())
-					&& Date.class.isAssignableFrom(max.getClass())) {
-				return super.between(fieldName, min, formatEndDate((Date) max));
-			} else if (min instanceof String && max instanceof String) {
-				Date from = tryCovert2Date(min.toString());
+		Object newMin = min, newMax = max;
+		if (min != null && min instanceof String) {
+			newMin = tryCovert2Date(min.toString());
+		}
+		if (max != null) {
+			if (Date.class.isAssignableFrom(max.getClass())) {
+				newMax = formatEndDate((Date) max);
+			} else if (max instanceof String) {
 				Date to = tryCovert2Date(max.toString());
-				if (from != null && to != null) {
-					return super.between(fieldName, from, formatEndDate(to));
-				}
+				if (to != null)
+					newMax = formatEndDate(to);
 			}
 		}
-		return super.between(fieldName, min, max);
+		// if (min != null && max != null) {
+		// if (Date.class.isAssignableFrom(min.getClass())
+		// && Date.class.isAssignableFrom(max.getClass())) {
+		// return super.between(fieldName, min, formatEndDate((Date) max));
+		// } else if (min instanceof String && max instanceof String) {
+		// Date from = tryCovert2Date(min.toString());
+		// Date to = tryCovert2Date(max.toString());
+		// if (from != null && to != null) {
+		// return super.between(fieldName, from, formatEndDate(to));
+		// }
+		// }
+		// }
+		return super.between(fieldName, newMin, newMax);
 	}
 
 	protected Date tryCovert2Date(String str) {
@@ -56,7 +69,7 @@ public class OracleCondition extends AbstractCondition {
 		if (dateMathcer.matches()) {
 			Calendar cal = Calendar.getInstance();
 			cal.set(Integer.valueOf(dateMathcer.group(1)),
-					Integer.valueOf(dateMathcer.group(2))-1,
+					Integer.valueOf(dateMathcer.group(2)) - 1,
 					Integer.valueOf(dateMathcer.group(3)), 0, 0, 0);
 			return cal.getTime();
 		} else {
@@ -64,7 +77,7 @@ public class OracleCondition extends AbstractCondition {
 			if (datetimeMatcher.matches()) {
 				Calendar cal = Calendar.getInstance();
 				cal.set(Integer.valueOf(dateMathcer.group(1)),
-						Integer.valueOf(dateMathcer.group(2))-1,
+						Integer.valueOf(dateMathcer.group(2)) - 1,
 						Integer.valueOf(dateMathcer.group(3)),
 						Integer.valueOf(dateMathcer.group(4)),
 						Integer.valueOf(dateMathcer.group(5)),

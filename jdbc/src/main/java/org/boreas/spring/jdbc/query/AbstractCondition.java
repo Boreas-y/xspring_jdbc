@@ -52,7 +52,14 @@ public abstract class AbstractCondition implements Sql, Condition {
 	@Override
 	public Query between(String fieldName, Object min, Object max) {
 		if (min != null && max != null) {
-			setValue(fieldName + " BETWEEN ? AND ?", min, max);
+			if (min.equals(max))
+				eq(fieldName, min);
+			else
+				setValue(fieldName + " BETWEEN ? AND ?", min, max);
+		} else if (min != null && max == null)
+			ge(fieldName, min);
+		else if (min == null && max != null) {
+			le(fieldName, max);
 		}
 		return query;
 	}
@@ -78,7 +85,12 @@ public abstract class AbstractCondition implements Sql, Condition {
 
 	@Override
 	public Query customize(String condition, Object... args) {
-		setValue(condition, args);
+		if (args != null) {
+			for (Object arg : args)
+				if (arg == null)
+					return query;
+			setValue(condition, args);
+		}
 		return query;
 	}
 
