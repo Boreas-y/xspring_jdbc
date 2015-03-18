@@ -1,4 +1,4 @@
-package org.boreas.spring.jdbc.query;
+package org.boreas.spring.jdbc.query.executor;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

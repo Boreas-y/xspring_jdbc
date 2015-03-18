@@ -1,4 +1,4 @@
-package org.boreas.spring.jdbc.query;
+package org.boreas.spring.jdbc.query.executor;
 
 /**
  * Enable {@code Query} to do something in chain invocation.

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.boreas.spring.jdbc.query.executor.QueryExecutor;
 import org.boreas.spring.jdbc.query.oracle.OracleQuery;
 
 /**

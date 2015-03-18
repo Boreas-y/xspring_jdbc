@@ -44,10 +44,9 @@ public abstract class AbstractOrder implements Sql, Order {
 
 	@Override
 	public Query order(String alias, Map<String, ?> orderMap) {
-		String tableAlias = StringUtils.hasText(alias) ? alias : "";
+		String tableAlias = StringUtils.hasText(alias) ? alias + "." : "";
 		for (String key : orderMap.keySet()) {
-			StringBuilder sql = new StringBuilder(tableAlias).append('.')
-					.append(key);
+			StringBuilder sql = new StringBuilder(tableAlias).append(key);
 			if (isAsc(orderMap.get(key)))
 				orders.add(sql.toString());
 			else
